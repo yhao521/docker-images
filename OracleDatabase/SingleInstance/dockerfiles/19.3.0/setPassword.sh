@@ -29,3 +29,26 @@ sqlplus / as sysdba << EOF
       exit;
 EOF
 
+ORACLE_USER_NAME=$2
+ORACLE_USER_PWD=$3
+
+sqlplus / as sysdba << EOF
+      alter profile default limit password_life_time unlimited; 
+      alter system set processes=10000 scope=spfile;
+      create USER  $ORACLE_USER_NAME IDENTIFIED by "$ORACLE_USER_PWD";
+      grant connect, resource to $ORACLE_USER_NAME; 
+      exit;
+EOF
+
+
+# sqlplus / as sysdba << EOF
+#       alter profile default limit password_life_time unlimited; 
+#       alter system set processes=10000 scope=spfile;
+#       ALTER USER SYS IDENTIFIED BY "$ORACLE_PWD";
+#       ALTER USER SYSTEM IDENTIFIED BY "$ORACLE_PWD";
+#       ALTER SESSION SET CONTAINER=$ORACLE_PDB;
+#       ALTER USER PDBADMIN IDENTIFIED BY "$ORACLE_PWD";
+#       create USER  c##$ORACLE_USER_NAME IDENTIFIED by "$ORACLE_USER_PWD";
+#       grant connect, resource to c##$ORACLE_USER_NAME; 
+#       exit;
+# EOF
